@@ -2,15 +2,14 @@ import React, { FC, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import Image from 'next/image'
-import { MovieModalProps, Rating } from '../types/MyTypes'
+import { Rating } from '../types/MyTypes'
 import noImage from '../assets/No_Image_Available.jpg'
 
-const DetailsModal: FC<any> = (props :MovieModalProps) => {
+const DetailsModal: FC<any> = ({ isOpen, setIsOpen, data }) => {
 
     const closeModal = () => {
-        props.setIsOpen(false);
+        setIsOpen(false);
     }
-    
 
     const {
         Title,
@@ -26,11 +25,11 @@ const DetailsModal: FC<any> = (props :MovieModalProps) => {
         Language,
         Poster,
         Ratings,
-    } = props.movieDetails
+    } = data
 
     return (
         <div>
-            <Transition appear show={props.isOpen} as={Fragment}>
+            <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as='div' className='relative z-10' onClose={closeModal}>
                     <Transition.Child
                         as={Fragment}

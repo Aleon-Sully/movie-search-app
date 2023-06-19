@@ -7,12 +7,10 @@ import DetailsModal from './DetailsModal';
 import noImage from '../assets/No_Image_Available.jpg'
 
 
-const SearchItem: FC<any> = (props: MovieProps): JSX.Element => {
+const SearchItem: FC<any> = ({ movie }): JSX.Element => {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [details, setDetails] = useState<AxiosResponse<MovieDetails>[] | null | void>(null);
-    console.log('props', props)
-    let currentMovie = props?.movie
 
     const getMoreDetails = (movieID: string) => {
         axios.get(`https://www.omdbapi.com/?apikey=1a085470&i=${movieID}`).then((res) => {
@@ -27,7 +25,7 @@ const SearchItem: FC<any> = (props: MovieProps): JSX.Element => {
         Year,
         imdbID,
         Poster
-    } = currentMovie;
+    } = movie;
 
     return (
         <div className='flex'>

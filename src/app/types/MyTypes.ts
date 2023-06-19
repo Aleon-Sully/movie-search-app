@@ -1,9 +1,11 @@
+import { StaticImageData } from "next/image"
+
 export type MovieType = {
   Title: string
   Year: string
   imdbID: string
   Type: string
-  Poster: string
+  Poster?: StaticImageData | string
 }
 
 export type Rating = {
@@ -25,7 +27,7 @@ export type MovieDetails = {
   Language: string
   Country: string
   Awards: string
-  Poster: string
+  Poster?: StaticImageData | string
   Ratings: Rating [],
   Metascore: number
   imdbRating: number
@@ -46,4 +48,10 @@ export interface MovieDetailsProps {
 
 export interface MovieProps {
   movie: MovieType
+}
+
+export interface MovieModalProps {
+  isOpen: boolean,
+  setIsOpen:(openState:boolean) => void,
+  movieDetails : MovieDetails
 }

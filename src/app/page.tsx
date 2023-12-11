@@ -83,34 +83,39 @@ export default function Home() {
 
   }, [searchResults])
 
+  const handleDebouncedInputChange = debounce((value: string) => {
+    // Perform the actual operation you want to debounce
+    setSearchResults(null);
+    setResultsLength(0);
+    setRequestStatus(0)
+    setResultsResponse('')
+    searchMovie();
+  }, 500); // Debounce time in milliseconds
+
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMovieName(event.target.value);
+    handleDebouncedInputChange(event.target.value);
+  };
+
 
 
   return (
     <main className="flex flex-col py-8">
       <div className="flex flex-row justify-center text-center px-2  items-center">
-        {navItems.map((item) =>
-          <span className="mx-1 cursor-pointer">{item}</span>
+        {navItems.map((item, key) =>
+          <span key={key} className="mx-1 cursor-pointer">{item}</span>
         )}
       </div>
       <h1 className="md:text-[64px] text-[32px] text-center">Movie Search App</h1>
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        setSearchResults(null);
-        setResultsLength(0);
-        setRequestStatus(0)
-        setResultsResponse('')
-        searchMovie();
-      }}>
+      <form>
         <div className="flex flex-row justify-center">
           <input
             type='text'
             name={''}
             id={''}
             placeholder={'Movie Title'}
-            onChange={(e) => {
-              e.preventDefault();
-              setMovieName(e.target.value)
-            }}
+            onChange={handleChange}
             value={movieName}
             className='text-center rounded-lg border-2 my-1 mx-1 border-gray-500 h-9'
           />
@@ -149,7 +154,7 @@ export default function Home() {
                 </div>
               </> : <>
                 <Swiper
-                  pagination ={{
+                  pagination={{
                     type: "fraction",
                     el: '.swiper-custom-pagination',
                   }}
@@ -162,15 +167,16 @@ export default function Home() {
                   }
                   className=''
                 >
-                  {myPages && myPages?.map((page: any[]) => {
+                  {myPages && myPages?.map((page: any[], key: number) => {
                     // console.log(myPages)
                     return (
                       <SwiperSlide
+                        key={key}
                         className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 justify-between items-center px-16'
                       >
                         <>
-                          {page.map((item) => (
-                            <div className='mx-2 my-2'>
+                          {page.map((item, index) => (
+                            <div key={index} className='mx-2 my-2'>
                               <SearchItem movie={item} />
                             </div>
                           ))}
@@ -179,7 +185,7 @@ export default function Home() {
                     )
                   })}
                 </Swiper>
-                <div className="swiper-custom-pagination"/>
+                <div className="swiper-custom-pagination" />
               </>
               }
             </div>
@@ -189,4 +195,15 @@ export default function Home() {
       <ErrorModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </main>
   )
+}
+
+
+function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
+  let timeoutId: NodeJS.Timeout;
+  return function (this: any, ...args: Parameters<T>) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
 }
